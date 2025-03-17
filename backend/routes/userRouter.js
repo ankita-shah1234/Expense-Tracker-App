@@ -2,7 +2,6 @@ const express = require("express");
 const isAuthenticated = require("../middlewares/isAuth");
 const usersController = require("../controllers/usersCtrl");
 const userRouter = express.Router();
-
 //! Register
 userRouter.post("/api/v1/users/register", usersController.register);
 //! Login
@@ -13,7 +12,6 @@ userRouter.get(
   isAuthenticated,
   usersController.profile
 );
-
 //!change password
 userRouter.put(
   "/api/v1/users/change-password",

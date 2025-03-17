@@ -11,16 +11,12 @@ mongoose
   .connect("mongodb://localhost:27017/amitdb")
   .then(() => console.log("DB Connected"))
   .catch((e) => console.log(e));
-
-
 //!Middlewares
 app.use(express.json()); //?Pass incoming json data
-
 //!Routes
 app.use("/", userRouter);
 app.use("/", categoryRouter);
 app.use("/", transactionRouter);
-
 //! Error
 app.use(errorHandler);
 

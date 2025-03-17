@@ -2,24 +2,22 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
+
 //!User Registration
 
 const usersController = {
   //!Register
   register: asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
-    
     //!Validate
     if (!username || !email || !password) {
       throw new Error("Please all fields are required");
     }
-
     //!Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
       throw new Error("User already exists");
     }
-
     //!Hash the user password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -37,7 +35,6 @@ const usersController = {
       id: userCreated._id,
     });
   }),
-  
   //!Login
   login: asyncHandler(async (req, res) => {
     //! Get the user data
@@ -65,8 +62,8 @@ const usersController = {
       username: user.username,
     });
   }),
+
   //!profile 
-  
   profile: asyncHandler(async (req, res) => {
     //! Find the user
     console.log(req.user);
@@ -77,7 +74,6 @@ const usersController = {
     //!Send the response
     res.json({ username: user.username, email: user.email });
   }),
-
   //! Change password
   changeUserPassword: asyncHandler(async (req, res) => {
     const { newPassword } = req.body;
@@ -98,7 +94,6 @@ const usersController = {
     //!Send the response
     res.json({ message: "Password Changed successfully" });
   }),
-
   //! update user profile
   updateUserProfile: asyncHandler(async (req, res) => {
     const { email, username } = req.body;
