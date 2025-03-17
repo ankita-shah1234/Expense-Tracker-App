@@ -77,6 +77,43 @@ const usersController = {
     //!Send the response
     res.json({ username: user.username, email: user.email });
   }),
+
+  //! Change password
+  changeUserPassword: asyncHandler(async (req, res) => {
+    const { newPassword } = req.body;
+    //! Find the user
+    const user = await User.findById(req.user);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    //! Hash the new password before saving
+    //!Hash the user password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    //! ReSave
+    await user.save({
+      validateBeforeSave: false,
+    });
+    //!Send the response
+    res.json({ message: "Password Changed successfully" });
+  }),
+
+  //! update user profile
+  updateUserProfile: asyncHandler(async (req, res) => {
+    const { email, username } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user,
+      {
+        username,
+        email,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json({ message: "User profile updated successfully", updatedUser });
+  }),
 };
 
 module.exports = usersController;
